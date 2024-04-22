@@ -16,6 +16,11 @@ class AdViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = ('title',)
 
+    def perform_create(self, serializer):
+        new_ad = serializer.save(author=self.request.user)
+        # new_ad.author = self.request.user
+        new_ad.save()
+
     def get_permissions(self):
         if self.action in ('list',):
             self.permission_classes = [AllowAny,]
